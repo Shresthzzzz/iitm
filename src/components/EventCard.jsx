@@ -98,27 +98,11 @@ export default function EventCard({ event, onUpdate }) {
         </button>
       </div>
 
-      {(showCancelDialog || showDeleteDialog) && (
-        <ConfirmDialog
-          title={showCancelDialog ? "Cancel Event" : "Delete Event"}
-          message={
-            showCancelDialog
-              ? "Why is this event being cancelled?"
-              : "This action cannot be undone. Are you sure?"
-          }
-          onConfirm={showCancelDialog ? confirmCancel : confirmDelete}
-          onCancel={() => {
-            setShowCancelDialog(false);
-            setShowDeleteDialog(false);
-          }}
-          isDangerous={true}
-        />
-      )}
-
       {showCancelDialog && (
-        <div className="modal-overlay" style={{ background: "transparent" }}>
+        <div className="modal-overlay">
           <div className="modal-content">
-            <h3>Cancellation Reason</h3>
+            <h3>Cancel Event</h3>
+            <p>Why is this event being cancelled?</p>
             <input
               className="modal-input"
               type="text"
@@ -133,7 +117,7 @@ export default function EventCard({ event, onUpdate }) {
             {error && <p className="modal-error">{error}</p>}
             <div className="modal-actions">
               <button className="secondary-button" onClick={() => setShowCancelDialog(false)}>
-                Close
+                Cancel
               </button>
               <button className="danger-button" onClick={confirmCancel} disabled={sending}>
                 {sending ? "Sending..." : "Confirm Cancellation"}
@@ -141,6 +125,16 @@ export default function EventCard({ event, onUpdate }) {
             </div>
           </div>
         </div>
+      )}
+
+      {showDeleteDialog && (
+        <ConfirmDialog
+          title="Delete Event"
+          message="This action cannot be undone. Are you sure?"
+          onConfirm={confirmDelete}
+          onCancel={() => setShowDeleteDialog(false)}
+          isDangerous={true}
+        />
       )}
 
       <div className="toast-container">
